@@ -1,0 +1,63 @@
+# slowfast_4x16_resnet50_custom
+
+DDP_CONFIG:
+  WORLD_SIZE: 1
+  WORLD_RANK: 0
+  GPU_WORLD_SIZE: 1
+  GPU_WORLD_RANK: 0
+  DIST_URL: 'tcp://172.31.72.252:23456'
+  WOLRD_URLS: ['172.31.72.252']
+  AUTO_RANK_MATCH: True
+  DIST_BACKEND: 'nccl'
+  GPU: 0
+  DISTRIBUTED: False
+
+CONFIG:
+  TRAIN:
+    EPOCH_NUM: 20
+    BATCH_SIZE: 8
+    LR: 0.001
+    MOMENTUM: 0.9
+    W_DECAY: 1e-5
+    USE_WARMUP: True
+    WARMUP_EPOCHS: 34
+    LR_POLICY: 'Cosine'
+    WARMUP_END_LR: 0.1
+    RESUME_EPOCH: -1
+
+  VAL:
+    FREQ: 1
+    BATCH_SIZE: 16
+
+  DATA:
+    TRAIN_ANNO_PATH: "~/ucfTrainTestlist/ucf101_train_split_1_rawframes.txt"
+    VAL_ANNO_PATH: "~/ucfTrainTestlist/ucf101_val_split_1_rawframes.txt"
+    TRAIN_DATA_PATH: "~/UCF-101"
+    VAL_DATA_PATH:  "~/UCF-101"
+    NUM_CLASSES: 400
+    CLIP_LEN: 32
+    FRAME_RATE: 2
+    NUM_SEGMENT: 1
+    NUM_CROP: 1
+    TEST_NUM_SEGMENT: 10
+    TEST_NUM_CROP: 3
+    MULTIGRID: False
+    KEEP_ASPECT_RATIO: False
+    NEW_WIDTH: 340
+    NEW_HEIGHT: 256
+
+  MODEL:
+    NAME: 'slowfast_4x16_resnet50_custom'
+    PRETRAINED: True
+    FINETUNE_CLASS: 101
+    FC_NUM: 2304
+
+  LOG:
+    BASE_PATH: './logs/slowfast_4x16_resnet50_custom_finetune_UCF101'
+    LOG_DIR: 'tb_log'
+    SAVE_DIR: 'checkpoints'
+    EVAL_DIR: './logs/slowfast_4x16_resnet50_custom_finetune_UCF101/eval'
+    SAVE_FREQ: 1
+    DISPLAY_FREQ_VAL: 1
+    DISPLAY_FREQ_TRAIN: 25
+

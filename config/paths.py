@@ -1,0 +1,3 @@
+PROJECT_PATH=""
+
+SLOW_FAST_4_16_RES50_FINETUNE_UCF_YAML=PROJECT_PATH+"config/yaml_config_file/slowfast_4x16_resnet50_custom_finetune_UCF_101.yaml"
