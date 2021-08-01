@@ -15,6 +15,16 @@ from gluoncv.torch.model_zoo.action_recognition.slowfast import slowfast_4x16_re
 
 from config.paths import SLOW_FAST_4_16_RES50_FINETUNE_UCF_YAML
 
+
+'''
+This is a modified version of the https://github.com/dmlc/gluon-cv/blob/master/scripts/action-recognition/train_ddp_pytorch.py
+
+Implementation in the link above is for multi-gpu env which adopts a distiributed approach
+
+This code, allows user to fine-tune an action recognition model defined in gluon-cv torch naive manner in a single gpu.
+
+'''
+
 def main_worker(cfg):
     # create tensorboard and logs
     if cfg.DDP_CONFIG.GPU_WORLD_RANK == 0:
@@ -25,7 +35,6 @@ def main_worker(cfg):
     cfg.freeze()
 
     # create model
-    # from my own zoo imported from the gluoncv codes to "action_recognition_models"
     model = slowfast_4x16_resnet50_kinetics400(cfg)
 
     # Handle gradient ops according to the pretraining flag
@@ -86,9 +95,9 @@ def main_worker(cfg):
         else:
             scheduler.step()
 
-        # if cfg.CONFIG.TRAIN.MULTIGRID.USE_LONG_CYCLE:
-        #     if epoch in cfg.CONFIG.TRAIN.MULTIGRID.LONG_CYCLE_EPOCH:
-        #         mg_sampler.step_long_cycle()
+        if cfg.CONFIG.TRAIN.MULTIGRID.USE_LONG_CYCLE:
+            if epoch in cfg.CONFIG.TRAIN.MULTIGRID.LONG_CYCLE_EPOCH:
+                mg_sampler.step_long_cycle()
 
         if epoch % cfg.CONFIG.VAL.FREQ == 0 or epoch == cfg.CONFIG.TRAIN.EPOCH_NUM - 1:
             validation_classification(model, val_loader, epoch, criterion, cfg, writer)
