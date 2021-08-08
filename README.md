@@ -1,5 +1,5 @@
 # Finetune Action Recognition Models with GluonCv Torch
-This repo contains the modified torch codes for finetuning the torch models in gluoncv. 
+This repo contains the modified gluoncv torch codes for finetuning the torch models in gluoncv. 
 
 - The code is adopted from the https://github.com/dmlc/gluon-cv/blob/master/scripts/action-recognition/train_ddp_pytorch.py
 
